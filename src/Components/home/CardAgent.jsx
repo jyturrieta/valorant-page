@@ -83,6 +83,7 @@ export default function CardAgent() {
   const results = !search ? agents : agents.filter((agent) => agent.displayName.toLowerCase().includes(search.toLowerCase()));
 
 
+  
 
   
   return (
