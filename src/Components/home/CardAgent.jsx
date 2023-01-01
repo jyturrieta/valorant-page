@@ -3,12 +3,10 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea, Input } from '@mui/material';
+import { CardActionArea, FormControl, Input, Button, TextField } from '@mui/material';
 import {Box} from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import {Button} from '@mui/material';
-
 
 export default function CardAgent() {
 
@@ -27,53 +25,6 @@ export default function CardAgent() {
     
   }, [])
 
-  function ordenarPorRol(){
-    const ordenar = [...agents].sort((a, b) => {
-      if (a.role.displayName > b.role.displayName) {
-        return 1;
-      }
-      if (a.role.displayName < b.role.displayName) {
-        return -1;
-      }
-      return 0;
-    });
-    setAgents(ordenar);
-  }
-
-  function filtrarControladores(){
-    const filtrar = [...agents].filter((a) => {
-      if (a.role.displayName === "Controlador") {
-        return a;
-      }
-    });
-    setAgents(filtrar);
-  }
-
-  function ordenarPorNombre() {
-    const ordenar = [...agents].sort((a, b) => {
-      if (a.displayName > b.displayName) {
-        return 1;
-      }
-      if (a.displayName < b.displayName) {
-        return -1;
-      }
-      return 0;
-    });
-    setAgents(ordenar);
-  }
-
-  function ordernarPorNombreDescendente(){
-    const ordenar = [...agents].sort((a, b) => {
-      if (a.displayName < b.displayName) {
-        return 1;
-      }
-      if (a.displayName > b.displayName) {
-        return -1;
-      }
-      return 0;
-    });
-    setAgents(ordenar);
-  }
 
   const searcher = (e) => {
     setSearch(e.target.value);
@@ -82,14 +33,32 @@ export default function CardAgent() {
 
   const results = !search ? agents : agents.filter((agent) => agent.displayName.toLowerCase().includes(search.toLowerCase()));
 
-
+  function ordenarPorNombre() {
+    results.sort((a, b) => {
+      if (a.displayName > b.displayName) {
+        return 1;
+      }
+      if (a.displayName < b.displayName) {
+        return -1;
+      }
+      return 0;
+    });
+    setAgents([...results]);
+  }
+  
   
 
   
   return (
     <>
-      <input type="text" placeholder="search" value={search} onChange={searcher}/>
-      <Box sx={{display:"flex", justifyContent:"center", alignItems:"center", flexWrap:"wrap", flexDirection:"row"}}>
+    <Box sx={{display:"flex", justifyContent:"center", alignItems:"center", flexWrap:"wrap", flexDirection:"row"}}>
+      <TextField label="buscar agente" value={search} onChange={searcher} variant="outlined" sx={{margin:"1rem"}}/>
+      <Button sx={{margin:"1rem"}}>Ordenar por rol</Button>
+      <Button  sx={{margin:"1rem"}}>Filtrar controladores</Button>
+      <Button  sx={{margin:"1rem"}}>Ordenar por nombre</Button>
+      <Button   sx={{margin:"1rem"}}>Ordenar por nombre descendente</Button>
+    </Box>  
+      <Box sx={{display:"flex", justifyContent:"center", flexWrap:"wrap", flexDirection:"row"}}>
         {results.map((agent) => (
           
           <Card sx={{ maxWidth: 345, margin:"1rem"}}>
@@ -107,9 +76,11 @@ export default function CardAgent() {
                   {agent.displayName}
                 </Typography>
               </Box>
-              <Typography variant="body2" textOverflow="ellipsis">
-                {agent.description}
-              </Typography>
+              <Box sx={{textOverflow:"ellipsis"}}>
+                <Typography variant="body2" textOverflow="ellipsis">
+                  {agent.description}
+                </Typography>
+              </Box>
             </CardContent>
           </CardActionArea>
         </Card>
